@@ -1,0 +1,428 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPGbxGpDBkRh0a7GVcyPyK2",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/ecyviana/praktikumEDAvia/blob/main/paktikumEdaVIa\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "DaGtsygBoZeI",
+        "outputId": "05323644-f179-454c-9127-2f7a586af93a"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Rata-rata harga: 6300.0\n",
+            "Harga tertinggi: 12000\n",
+            "Harga setelah diskon 10%: [ 4500.  6300.  2700. 10800.  4050.]\n"
+          ]
+        }
+      ],
+      "source": [
+        "import numpy as np\n",
+        "harga = np.array([5000, 7000, 3000, 12000, 4500])\n",
+        "print('Rata-rata harga:', harga.mean())\n",
+        "print('Harga tertinggi:', harga.max())\n",
+        "print('Harga setelah diskon 10%:', harga * 0.9)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Tugas Analisis 1\n",
+        "\n",
+        "Hasil pada List biasa: Error (TypeError).\n",
+        "Penyebab: Operator * pada List Python berfungsi untuk mengulang/menggandakan isi list, bukan perkalian matematika. Mengalikan list dengan desimal (0.9) tidak diperbolehkan.\n",
+        "Perbedaan: NumPy Array didesain untuk operasi matematika, sehingga harga * 0.9 langsung mengalikan setiap angka di dalamnya."
+      ],
+      "metadata": {
+        "id": "dVPz66_5okbr"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "data_kantin = {\n",
+        "'menu': ['Nasi Goreng', 'Es Teh', 'Mie Ayam', 'Es Teh', None],\n",
+        "'harga': [12000, 4000, 10000, 4000, 8000],\n",
+        "'terjual': [23, 40, None, 35, 18]\n",
+        "}\n",
+        "df = pd.DataFrame(data_kantin)\n",
+        "print(df)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "SN49PwBnqhBs",
+        "outputId": "a205e020-0c51-4545-b32c-844b2aa177d0"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "          menu  harga  terjual\n",
+            "0  Nasi Goreng  12000     23.0\n",
+            "1       Es Teh   4000     40.0\n",
+            "2     Mie Ayam  10000      NaN\n",
+            "3       Es Teh   4000     35.0\n",
+            "4         None   8000     18.0\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Tugas Analisis 2\n",
+        "\n",
+        "Kolom bernilai kosong: menu (baris 4) dan terjual (baris 2).\n",
+        "Risiko tanpa pembersihan:\n",
+        "Analisis Salah: Rata-rata dan total penjualan menjadi tidak akurat.\n",
+        "Program Error: Fungsi perhitungan atau olah teks bisa gagal saat memproses nilai kosong (None/NaN).\n",
+        "Keputusan keliru: Informasi menu terlaris atau pendapatan kantin menjadi bias."
+      ],
+      "metadata": {
+        "id": "--iy8ls8qkQG"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Membuat file data_kantin.csv sementara di Google Colab\n",
+        "df.to_csv('data_kantin.csv', index=False)\n",
+        "\n",
+        "# Membaca data dari file CSV\n",
+        "df = pd.read_csv('data_kantin.csv')\n",
+        "\n",
+        "print(\"--- 5 Baris Pertama ---\")\n",
+        "print(df.head())\n",
+        "\n",
+        "print(\"\\n--- Info DataFrame ---\")\n",
+        "print(df.info())\n",
+        "\n",
+        "print(\"\\n--- Statistik Ringkas ---\")\n",
+        "print(df.describe())\n",
+        "\n",
+        "print(\"\\n--- Ukuran Dataset (Baris, Kolom) ---\")\n",
+        "print(df.shape)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "collapsed": true,
+        "id": "BJlZURygqpR6",
+        "outputId": "aee8cb0e-f2ac-4ac9-a05a-4584b0af912d"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "--- 5 Baris Pertama ---\n",
+            "          menu  harga  terjual  total_pendapatan\n",
+            "0  Nasi Goreng  12000       23            276000\n",
+            "1     Mie Ayam  10000        0                 0\n",
+            "2       Es Teh   4000       40            160000\n",
+            "\n",
+            "--- Info DataFrame ---\n",
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "RangeIndex: 3 entries, 0 to 2\n",
+            "Data columns (total 4 columns):\n",
+            " #   Column            Non-Null Count  Dtype \n",
+            "---  ------            --------------  ----- \n",
+            " 0   menu              3 non-null      object\n",
+            " 1   harga             3 non-null      int64 \n",
+            " 2   terjual           3 non-null      int64 \n",
+            " 3   total_pendapatan  3 non-null      int64 \n",
+            "dtypes: int64(3), object(1)\n",
+            "memory usage: 228.0+ bytes\n",
+            "None\n",
+            "\n",
+            "--- Statistik Ringkas ---\n",
+            "              harga   terjual  total_pendapatan\n",
+            "count      3.000000   3.00000          3.000000\n",
+            "mean    8666.666667  21.00000     145333.333333\n",
+            "std     4163.331999  20.07486     138583.308278\n",
+            "min     4000.000000   0.00000          0.000000\n",
+            "25%     7000.000000  11.50000      80000.000000\n",
+            "50%    10000.000000  23.00000     160000.000000\n",
+            "75%    11000.000000  31.50000     218000.000000\n",
+            "max    12000.000000  40.00000     276000.000000\n",
+            "\n",
+            "--- Ukuran Dataset (Baris, Kolom) ---\n",
+            "(3, 4)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Tugas Analisis 3\n",
+        "\n",
+        "Kolom dengan jumlah non-null lebih sedikit: Kolom yang nilai non-null count-nya kurang dari angka total baris pada range index (misalnya 95 non-null dari total 100 baris).\n",
+        "\n",
+        "Artinya: Kolom tersebut memiliki data yang hilang atau kosong (missing values / NaN) pada baris-baris tertentu."
+      ],
+      "metadata": {
+        "id": "OEYlnS-Pq1Pw"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(\"--- Jumlah Data Kosong Sebelum ---\")\n",
+        "print(df.isnull().sum())\n",
+        "\n",
+        "# Penanganan missing values\n",
+        "df['terjual'] = df['terjual'].fillna(0)  # Isi kekosongan kolom terjual dengan 0\n",
+        "df = df.dropna(subset=['menu'])         # Hapus baris jika kolom menu kosong\n",
+        "\n",
+        "print(\"\\n--- Jumlah Data Kosong Sesudah ---\")\n",
+        "print(df.isnull().sum())"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "cnMEuB_sq_Yx",
+        "outputId": "ccda37b6-4f4f-40d3-b865-df5ba36881cd"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "--- Jumlah Data Kosong Sebelum ---\n",
+            "menu                0\n",
+            "harga               0\n",
+            "terjual             0\n",
+            "total_pendapatan    0\n",
+            "dtype: int64\n",
+            "\n",
+            "--- Jumlah Data Kosong Sesudah ---\n",
+            "menu                0\n",
+            "harga               0\n",
+            "terjual             0\n",
+            "total_pendapatan    0\n",
+            "dtype: int64\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Tugas Analisis 4\n",
+        "\n",
+        "fillna(0) pada kolom `terjual`:\n",
+        "Alasan:`terjual` adalah data kuantitatif (angka). Mengisinya dengan `0` secara logis mengasumsikan bahwa item tersebut **tidak ada yang membeli** hari itu, sehingga angka $0$ tetap relevan untuk perhitungan statistik tanpa membuang informasi harga atau nama produknya.\n",
+        "\n",
+        "\n",
+        "dropna() pada kolom `menu`:\n",
+        "Alasan: `menu` adalah entitas utama (identitas produk). Tanpa nama menu, baris data tersebut tidak beridentitas—kita tidak tahu produk apa yang memiliki harga/penjualan tersebut, sehingga datanya menjadi **tidak bermakna/tidak berguna** untuk analisis bisnis dan lebih baik dihapus."
+      ],
+      "metadata": {
+        "id": "jYqJ5Ot-t3bk"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print('Jumlah baris duplikat:', df.duplicated().sum())\n",
+        "\n",
+        "# Menghapus duplikat\n",
+        "df = df.drop_duplicates()\n",
+        "\n",
+        "# Memastikan tipe data integer\n",
+        "df['terjual'] = df['terjual'].astype(int)\n",
+        "df['harga'] = df['harga'].astype(int)\n",
+        "\n",
+        "print(\"\\n--- Tipe Data Kolom ---\")\n",
+        "print(df.dtypes)\n",
+        "print(\"\\n--- Data Setelah Duplikat Dihapus ---\")\n",
+        "print(df)"
+      ],
+      "metadata": {
+        "id": "DPoBppXPuHP0"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Tugas Analisis 5\n",
+        "\n",
+        "Jumlah baris: Berkurang dari 5 baris menjadi 3 baris (karena 1 baris menu None dihapus di langkah sebelumnya, dan 1 baris duplikat Es Teh dihapus).\n",
+        "Pentingnya tipe data (dtypes):\n",
+        "Akurasi Perhitungan: Mengubah teks menjadi angka (int) agar fungsi seperti sum() atau mean() bisa berjalan tanpa error.\n",
+        "Logika Data: Kolom terjual dan harga adalah jumlah barang dan nominal bulat, sehingga tidak relevan menggunakan koma/desimal (float)."
+      ],
+      "metadata": {
+        "id": "JiiwKE8wuuoJ"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# 1. Filtering (terjual > 20)\n",
+        "laris = df[df['terjual'] > 20]\n",
+        "print(\"--- Menu Laris (>20) ---\")\n",
+        "print(laris)\n",
+        "# 2. Sorting\n",
+        "urut = df.sort_values(by='terjual', ascending=True)\n",
+        "# 3. Kolom Turunan (total_pendapatan)\n",
+        "df['total_pendapatan'] = df['harga'] * df['terjual']\n",
+        "# 4. Agregasi Groupby\n",
+        "ringkasan = df.groupby('menu')['total_pendapatan'].sum()\n",
+        "print(\"\\n--- Ringkasan Total Pendapatan per Menu ---\")\n",
+        "print(ringkasan)\n",
+        "print(urut)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "tA8MUieFu0VZ",
+        "outputId": "0648c506-a364-41f2-b5b0-5f1247991ed1"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "--- Menu Laris (>20) ---\n",
+            "          menu  harga  terjual  total_pendapatan\n",
+            "0  Nasi Goreng  12000       23            276000\n",
+            "2       Es Teh   4000       40            160000\n",
+            "\n",
+            "--- Ringkasan Total Pendapatan per Menu ---\n",
+            "menu\n",
+            "Es Teh         160000\n",
+            "Mie Ayam            0\n",
+            "Nasi Goreng    276000\n",
+            "Name: total_pendapatan, dtype: int64\n",
+            "          menu  harga  terjual  total_pendapatan\n",
+            "1     Mie Ayam  10000        0                 0\n",
+            "0  Nasi Goreng  12000       23            276000\n",
+            "2       Es Teh   4000       40            160000\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Tugas Analisis 6\n",
+        "\n",
+        "Menu pendapatan tertinggi: Nasi Goreng (dengan total pendapatan Rp276.000, hasil dari 12.000 × 23).\n",
+        "\n",
+        "Manfaat untuk keputusan kantin:\n",
+        "Stok & Bahan Baku: Memastikan porsi dan bahan baku Nasi Goreng selalu tersedia lebih banyak agar tidak kehabisan.\n",
+        "Strategi Promosi/Bundling: Menjadikan Nasi Goreng sebagai menu utama untuk dipaketkan dengan menu yang kurang laku (misal: Paket Hemat Nasi Goreng + Es Teh).\n",
+        "Evaluasi Menu: Fokus mempertahankan kualitas menu penyumbang omzet terbesar bagi kantin."
+      ],
+      "metadata": {
+        "id": "qxtfZxp-u43r"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "# 1. Menyiapkan DataFrame (hasil dari Latihan 1 - 5)\n",
+        "data_kantin = {\n",
+        "    'menu': ['Nasi Goreng', 'Mie Ayam', 'Es Teh'],\n",
+        "    'harga': [12000, 10000, 4000],\n",
+        "    'terjual': [23, 0, 40]\n",
+        "}\n",
+        "df = pd.DataFrame(data_kantin)\n",
+        "\n",
+        "# 2. Filtering & Sorting\n",
+        "laris = df[df['terjual'] > 20]\n",
+        "urut = df.sort_values(by='terjual', ascending=False)\n",
+        "\n",
+        "# 3. Membuat kolom turunan total_pendapatan\n",
+        "df['total_pendapatan'] = df['harga'] * df['terjual']\n",
+        "\n",
+        "# 4. Agregasi dengan Groupby\n",
+        "ringkasan = df.groupby('menu')['total_pendapatan'].sum()\n",
+        "print(\"--- Ringkasan Total Pendapatan per Menu ---\")\n",
+        "print(ringkasan)\n",
+        "\n",
+        "# 5. KODE TAMBAHAN: Mencari menu dengan total_pendapatan tertinggi secara otomatis\n",
+        "menu_tertinggi = ringkasan.idxmax()\n",
+        "pendapatan_tertinggi = ringkasan.max()\n",
+        "\n",
+        "print(\"\\n--- KESIMPULAN HASIL ANALISIS ---\")\n",
+        "print(f\"Menu dengan pendapatan tertinggi: {menu_tertinggi}\")\n",
+        "print(f\"Total pendapatan: Rp{pendapatan_tertinggi:,}\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "mVEoRQbKvEJ9",
+        "outputId": "4e6f3934-09fc-4320-d51b-64cb316275ed"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "--- Ringkasan Total Pendapatan per Menu ---\n",
+            "menu\n",
+            "Es Teh         160000\n",
+            "Mie Ayam            0\n",
+            "Nasi Goreng    276000\n",
+            "Name: total_pendapatan, dtype: int64\n",
+            "\n",
+            "--- KESIMPULAN HASIL ANALISIS ---\n",
+            "Menu dengan pendapatan tertinggi: Nasi Goreng\n",
+            "Total pendapatan: Rp276,000\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
